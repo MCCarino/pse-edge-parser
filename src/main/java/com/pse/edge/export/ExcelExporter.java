@@ -53,38 +53,65 @@ public class ExcelExporter implements Exporter {
   
   /**
    * Perform excel export
+   * 
+   * 1. Create excel workbook
+   * 2. Create sheet within the workbook
+   * 3. Create a row inside the sheet
+   * 4. Create cells inside each row
    */
   public void export() throws Exception {
+	//create excel workbook
     try (XSSFWorkbook wb = getXlsWorkBook()) {
+      //create sheet
       String sheetName = (new SimpleDateFormat(DATE_FORMAT)).
           format(Calendar.getInstance().getTime());
       XSSFSheet sheet = wb.createSheet(sheetName);
+      //create header row for the sheet
       generateHeaderRow(wb, sheet);
       
       int stockSize = getStockList().size();
+      //create row for each stock
       for (int a=1; a<=stockSize; a++) {
         Stock currStock = getStockList().get(a-1);
         Row row = sheet.createRow(a);
+        
+        //name of the stock
         Cell nameCell = row.createCell(0);
         nameCell.setCellValue(currStock.getName());
+        
+        //symbol of the stock
         Cell symbolCell = row.createCell(1);
         symbolCell.setCellValue(currStock.getSymbol());
+        
+        //current price of the stock
         Cell priceCell = row.createCell(2);
         priceCell.setCellValue(String.valueOf(currStock.getPrice()));
+        
+        //52-week high of the stock
         Cell high52cell = row.createCell(3);
         high52cell.setCellValue(String.valueOf(currStock.getFiftyTwoHigh()));
+        
+        //52-week low of the stock
         Cell low52cell = row.createCell(4);
         low52cell.setCellValue(String.valueOf(currStock.getFiftyTwoLow()));
+        
+        //Price to buy for 50 percent gain
         Cell fiftyGainCell = row.createCell(5);
         fiftyGainCell.setCellValue(String.valueOf(currStock.getPrice50Gain()));
+        
+        //Percent difference from price to buy for 50 percent gain
+        //This indicates to user how far the price is for buying for potential 50
+        //percent gain
         Cell diffFiftyGainCell = row.createCell(6);
         diffFiftyGainCell.setCellValue(String.valueOf(currStock.getPercDiffPrice50Gain()));
       }
       
+      //fit width to contents
       for (int k=0; k<HEADERS.size(); k++) {
         sheet.autoSizeColumn(k);
       }
       
+      //write workbook to file
       try (OutputStream fileOut = new FileOutputStream(getFilename())) {
         wb.write(fileOut);
       }
