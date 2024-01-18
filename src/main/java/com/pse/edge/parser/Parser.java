@@ -37,22 +37,22 @@ public class Parser {
    * 
    * @throws Exception
    */
-	public void parseEdge() throws Exception {
-	  Document doc = getCompanyDirPage();
+  public void parseEdge() throws Exception {
+    Document doc = getCompanyDirPage();
     //parse first page
     parseCompanies(doc);
-    
+
     int pageCount = getCompanyDirPageCount(doc);
     for (int a = 2; a <= pageCount; a++) {
       doc = getCompanyDirPage(a);
-      try {
-        parseCompanies(doc);
+	  try {
+	    parseCompanies(doc);
       } catch (SocketTimeoutException ste) {
         continue;
       }
     }
-    generateStocksXls();
-	}
+    generateStocksXls(); 
+  }
 	
 	/**
 	 * Get the number of pages on the company directory document
@@ -60,15 +60,15 @@ public class Parser {
 	 * @param doc
 	 * @return
 	 */
-	private int getCompanyDirPageCount(Document doc) {
-	  Elements spans = doc.select("span");
-    String lastSpan = spans.get(spans.size()-1).text();
-    try {
-      int pageCnt = Integer.parseInt(lastSpan);
-      return pageCnt;
-    } catch (NumberFormatException nfe) {
-      return 0;
-    }
+  private int getCompanyDirPageCount(Document doc) {
+  	Elements spans = doc.select("span");
+  	String lastSpan = spans.get(spans.size()-1).text();
+  	try {
+  	  int pageCnt = Integer.parseInt(lastSpan);
+  	  return pageCnt;
+  	} catch (NumberFormatException nfe) {
+  	  return 0;
+  	}
   }
 
   /**
@@ -126,11 +126,11 @@ public class Parser {
    * @throws IOException
    */
   private void parseYearHighLow(String compId, String name, String symbol) throws SocketTimeoutException, IOException {
-	  Document doc = 
-        Jsoup.connect(
-            ProjConstants.EDGE_COMPANY_DETAILS_URL +
-            ProjConstants.EDGE_COMPANY_DETAILS_COMP_ID_PARAM 
-            + compId).get();
+  	Document doc = 
+	    Jsoup.connect(
+	        ProjConstants.EDGE_COMPANY_DETAILS_URL +
+	        ProjConstants.EDGE_COMPANY_DETAILS_COMP_ID_PARAM 
+	        + compId).get();
     
     Element view = doc.select("table[class=view] tbody").get(1);
     Elements rows = view.select("tr");
@@ -171,7 +171,7 @@ public class Parser {
         stocks.add(stock);
       }
     }
-	}
+  }
   
   /**
    * Get JSoup Document of the company directory page
