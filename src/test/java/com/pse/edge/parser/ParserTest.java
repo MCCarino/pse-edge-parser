@@ -56,7 +56,12 @@ public class ParserTest {
 		assertEquals(parser.getCompanyDirPageCount(docToTest), Optional.ofNullable(Integer.parseInt(lastSpan)).orElse(0));
 	}
 
-	
+	/**
+	 * Test if parser properly collects stock details from PSE Edge
+	 * stock details page
+	 * 
+	 * @throws Exception
+	 */
   @Test 
   void testStockDetails() throws Exception { 
   	Document docToTest = parser.getCompanyDirPage(0); 
