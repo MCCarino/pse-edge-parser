@@ -45,7 +45,7 @@ public class ParserTest {
 		Document docToTest = parser.getCompanyDirPage(0);
 		Elements spans = docToTest.select("span");
 		String lastSpan = spans.get(spans.size()-1).text();
-  	assertEquals(parser.getCompanyDirPageCount(docToTest), 
+		assertEquals(parser.getCompanyDirPageCount(docToTest), 
 				Optional.ofNullable(Integer.parseInt(lastSpan)).orElse(0));
 	}
 }
