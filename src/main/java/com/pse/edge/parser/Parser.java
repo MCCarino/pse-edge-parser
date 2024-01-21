@@ -45,8 +45,8 @@ public class Parser {
     int pageCount = getCompanyDirPageCount(doc);
     for (int a = 2; a <= pageCount; a++) {
       doc = getCompanyDirPage(a);
-	  try {
-	    parseCompanies(doc);
+      try {
+      	parseCompanies(doc);
       } catch (SocketTimeoutException ste) {
         continue;
       }
@@ -60,7 +60,7 @@ public class Parser {
 	 * @param doc
 	 * @return
 	 */
-  private int getCompanyDirPageCount(Document doc) {
+  public int getCompanyDirPageCount(Document doc) {
   	Elements spans = doc.select("span");
   	String lastSpan = spans.get(spans.size()-1).text();
   	try {
@@ -179,7 +179,7 @@ public class Parser {
    * @return
    * @throws Exception
    */
-  private Document getCompanyDirPage() throws Exception {
+  public Document getCompanyDirPage() throws Exception {
     return getCompanyDirPage(0);
   }
   
@@ -190,7 +190,7 @@ public class Parser {
    * @return
    * @throws Exception
    */
-  private Document getCompanyDirPage(int page) throws Exception {
+  public Document getCompanyDirPage(int page) throws Exception {
     return Jsoup.connect(ProjConstants.EDGE_COMPANY_DIR_URL + 
         (page != 0 ? ProjConstants.EDGE_COMPANY_DIR_PAGE_NO_PARAM + page : ""))
           .get();
