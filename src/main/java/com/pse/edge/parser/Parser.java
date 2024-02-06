@@ -125,7 +125,7 @@ public class Parser {
    * @throws SocketTimeoutException
    * @throws IOException
    */
-  private void parseYearHighLow(String compId, String name, String symbol) throws SocketTimeoutException, IOException {
+  public Stock parseYearHighLow(String compId, String name, String symbol) throws SocketTimeoutException, IOException {
   	Document doc = 
 	    Jsoup.connect(
 	        ProjConstants.EDGE_COMPANY_DETAILS_URL +
@@ -146,6 +146,17 @@ public class Parser {
     
     BigDecimal priceDiff = price.subtract(priceFiftyGain).abs();
     BigDecimal percDiff = BigDecimal.ZERO;
+    
+    //create stock object for test
+    Stock stock = new Stock();
+    stock.setName(name);
+    stock.setSymbol(symbol);
+    stock.setPrice(price);
+    stock.setFiftyTwoHigh(high);
+    stock.setFiftyTwoLow(low);
+    stock.setPrice50Gain(priceFiftyGain);
+    stock.setPercDiffPrice50Gain(percDiff);
+    
     if (price.compareTo(BigDecimal.ZERO) != 0) {
       percDiff = priceDiff.divide(price, 3, RoundingMode.HALF_EVEN).
           multiply(ProjConstants.BIG_DECIMAL_100);
@@ -159,18 +170,11 @@ public class Parser {
         log.fine("Divide by 1.5: " + priceFiftyGain);
         log.fine("Percent diff: " + percDiff);
         
-        Stock stock = new Stock();
-        stock.setName(name);
-        stock.setSymbol(symbol);
-        stock.setPrice(price);
-        stock.setFiftyTwoHigh(high);
-        stock.setFiftyTwoLow(low);
-        stock.setPrice50Gain(priceFiftyGain);
-        stock.setPercDiffPrice50Gain(percDiff);
-        
+        //add stock to list only if passing criteria
         stocks.add(stock);
       }
     }
+    return stock;
   }
   
   /**
