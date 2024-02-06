@@ -155,11 +155,12 @@ public class Parser {
     stock.setFiftyTwoHigh(high);
     stock.setFiftyTwoLow(low);
     stock.setPrice50Gain(priceFiftyGain);
-    stock.setPercDiffPrice50Gain(percDiff);
+    stock.setPercDiffPrice50Gain(BigDecimal.ZERO);
     
     if (price.compareTo(BigDecimal.ZERO) != 0) {
       percDiff = priceDiff.divide(price, 3, RoundingMode.HALF_EVEN).
           multiply(ProjConstants.BIG_DECIMAL_100);
+      stock.setPercDiffPrice50Gain(percDiff);
       
       if (percDiff.compareTo(ProjConstants.FIVE_PERCENT) <= 0) {
         log.fine("Name: " + name);
